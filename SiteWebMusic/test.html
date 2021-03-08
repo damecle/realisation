@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+</head>
+<body>
+
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <form action="" id="myForm">
+                <div class="form-group">
+                    <label for="city">Ville : </label>
+                    <input type="text" id="city" class="form-control">
+
+                </div>
+                <div class="form-group">
+                    <label for="country">Pays : </label>
+                    <input type="text" id="country" class="form-control">
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-success" type="submit">Rechercher la météo</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-6">
+            <span class="h4" id="temp"></span><br>
+            <span class="h4" id="weather"></span>
+            <img src="" id="image" alt=""><br>
+            <span class="h4" id="sunrise"></span><br>
+            <span class="h4" id="sunset"></span><br>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        const TOKEN = "096a8cc64fcbfc5831847a29428d0623"
+        $('#myForm').submit(function (event) {
+            event.preventDefault()
+            var city = $('#city').val()
+            var country = $('#country').val()
+            if (city == "" || country == "") {
+                alert("Il manque des champs")
+            } else {
+
+                var urlMeteo = "http://api.openweathermap.org/data/2.5/weather?q=%city%,%country%&appid=%token%&units=metric&lang=FR"
+                var urlTarget = urlMeteo
+                urlTarget = urlTarget.replace(/%city%/g, city)
+                urlTarget = urlTarget.replace(/%country%/g, country)
+                urlTarget = urlTarget.replace(/%token%/g, TOKEN)
+
+                //AJAX
+                $.get(urlTarget, function (data){
+
+                    console.log(data);
+                })
+
+            }
+        })
+
+        function ajouteUnZero(number){
+            return number < 10 ? "0"+number : number
+        }
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+body{
+	background-color: black;
+
+}
+/*police,size,couleur des textes*/
+h4{
+	color: white;
+}
+
+
+/*disposition*/
+main{
+	display: flex;
+}
+.colone2{
+	width: 20%;
+}
+.colone3{
+	width: 80%;
+}
+
+
+
+
+/*logo*/
+#logo{
+	margin-left: 25%;
+	margin-bottom: 20px;
+}
+
+
+
+
+
+/*navbar*/
+.nav-link{
+	color: #6C92F1;
+}
+a{
+	margin-top: 20px;
+}
+
+
+
+/*mains*/
+	/*playlist.....................*/
+	#playlist{
+		height: 200px;
+	}
+	.playlistSize{
+		width: 200px;
+		height: 200px;
+		border-radius: 10px;
+		color:red;
+		border-color: #294BA3;
+		background-color: #F1D8D8;
+
+	}
+	.coeur{
+		padding-top:28%;
+		padding-left: 25%;
+	}
+	.playlistSize:hover{
+		color:#294BA3;
+		box-shadow: 0px 4px 4px #294BA3;
+	}
+	/*les titres...................*/
+	.modifTitre{
+		background-color: #443F3F;
+		position: relative;
+		width: 100%;
+		height: 120px;
+		border-radius: 10px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+
+	}
+	.modifTitre:hover{
+		box-shadow: 0px 4px 4px #294BA3
+	}
+	/*img*/
+
+	.modifImg{
+		border-radius: 10px;
+		height: 120px;
+	}
+	/*texte*/
+	.containTxt{
+		cursor: pointer;
+		padding-top: 20px;
+		padding-left: 3%;
+		
+	}
+	.containImg{
+		cursor: pointer;
+	}
+	.nom{
+		color: #6C92F1;
+	}
+	.artiste{
+		color: #FFFFFF;
+	}
+	.containLogo{
+		position: absolute;
+		right: 6%;
+		top: 40%;
+		cursor: pointer;
+		color: #6C92F1;
+	}
+	/*search............*/
+	#search{
+		background-color: #443F3F;
+		height: 70px;
+		padding-top: 15px;
+		border-radius: 10px;
+		margin-right: 1%;
+		margin-bottom: 10px;
+	}
+
+	.btn-outline-success{
+		color: #294BA3;
+		border-color: #294BA3;
+	}
+
+	/*LECTEUR AUDIO*/
+
+#player{
+  background-color: rgba(187, 48, 48, 0.95);
+  position: fixed;
+  bottom: 0;
+  height: 15vh;
+  width: 100%;
+  z-index: 50;
+}
+#bar{
+  position:relative;
+  text-align: center;
+  width:100%;
+  padding-top: 25px;
+}
+#currentTime,#totalTime{transform:translateY(-50%);padding: 0 2%;font-size: 3vh}
+@media only screen and (min-height: 500px){#currentTime,#totalTime{font-size: 2.25vh !important;}}
+#currentTime,#progress-bar,#totalTime{color: white;display: inline-block;}
+#progress-bar{
+  position: relative;
+  text-align: center;
+  height: 0.25em;
+  width: 70%;
+  border: 1px solid #222;
+  background: #333;
+  border-radius: 20px;
+  margin:0;padding:0;
+  cursor: pointer;
+  transform: translateY(-160%);
+}
+#progress{
+  height:100%;
+  width:0%;
+  background: red;
+  border-radius: 20px;
+  text-align: right;
+  transition: ease all;
+}
+#progress > i{
+  position: absolute;
+  transform: translate(-50%,-35%);
+}
+#menu{
+  position:relative;
+  text-align: center;
+  width:100%;
+  overflow: hidden;
+}
+#menu > button{
+  padding: 10px 14px;
+  border-radius: 50%;
+  border: none;
+  margin: 0 5px;
+  background: inherit;
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  opacity: 0.75;
+  cursor: pointer;
+}
+#menu > button > i{
+  padding: 5px 3px 5px 5px;
+}
+#menu > button#play{
+  opacity: 1;
+  border: 2px solid white;
+}
+#menu > button:focus{
+  outline: none;
+}
+
