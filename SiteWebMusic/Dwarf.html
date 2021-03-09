@@ -90,7 +90,7 @@
         <nav class="nav flex-column">
           <a class="nav-link active" aria-current="page" id="homePage" href="#"><i class="fas fa-home fa-3x"></i>  Acceuil</a>
           <a class="favShow nav-link" href="#"><i class="fas fa-heart-square fa-3x"></i>   Favoris</a>
-          <a class="nav-link" href="#"><i class="fas fa-music fa-3x"></i>   Playlist</a>
+          <a class="playShow nav-link" data-toggle="tooltip" href="#"><i class="fas fa-music fa-3x"></i>   Playlist</a>
           <a class="nav-link" id="exit" href="#"><i class="fas fa-power-off fa-3x"></i> Déconnection</a>
         </nav>
     </div>
@@ -105,11 +105,10 @@
         </div>
         <h4>Playlist:</h4>
         <div class="playlist"></div>
-        <h4>Les titres:</h4>
+        <h4 id="titre2">Les titres:</h4>
         <div class="liste"></div>
     </div>
   </main>
-      <div id="audioLecteur"></div>
     <!--Lecteur-->
   <audio id="audioFile">
     <source src="">
@@ -132,9 +131,37 @@
       <button id="shuffle" style="color:grey"><i class="fa fa-random"></i></button>
     </div>
   </div>
+    <!-- Modal -->
+  <div class="modal fade bd-example-modal-lg" id="modalPlaylist" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Ta nouvelle playlist</h5>
+          <button type="button" class="btn-close closeMod" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Nom de ta playlist:</label>
+              <input type="text" class="form-control" id="recipient-name">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary closeMod" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Création</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"
+        integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf"
+        crossorigin="anonymous"></script>
 
 	<script type="text/javascript" src="Dwarf.js"></script>
 </body>

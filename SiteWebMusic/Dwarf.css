@@ -64,6 +64,9 @@ a{
 		color:#294BA3;
 		box-shadow: 0px 4px 4px #294BA3;
 	}
+	.btnCreat{
+		margin-top: 40px;
+	}
 	/*les titres...................*/
 	.modifTitre{
 		background-color: #443F3F;

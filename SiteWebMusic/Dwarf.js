@@ -124,7 +124,29 @@ $('#audioLecteur').prepend(lecteur)*/
 //Favoris
 	ajoutFav() //ajout au Local storage
 	$('.favShow').click(ShowFavoris) //aller dans les favoris
-	
+//Playlist
+    //playlist div
+    $('.playShow').click(function(){
+        $('#titre2').html("")
+        $('.liste').empty()
+        $('#player').empty()
+        $('#audioFile').empty()
+        $('#player').html(`
+                <div class="d-grid gap-2">
+                    <button id="newPlaylist" type="button" class="btnCreat btn btn-primary" data-toggle="tooltip" data-bs-target="#exampleModal">
+                     Nouvelle playlist
+                    </button>
+                </div>
+            `)
+        $('#newPlaylist').click(function(){
+            $('#modalPlaylist').modal('show')
+        })
+    })
+    //modale
+
+    $('.closeMod').click(function(){
+        $('#modalPlaylist').modal('hide')
+    })
 
 
 
@@ -140,19 +162,21 @@ function generateTitre(songsX){ //genere les titres
 	 	texte = texte.replace(/%artist%/g,songsX.artist)
 	 	$('.liste').append(texte)
 }
-function generatePlaylistHeart(){ //genere la playlist favoris
-	var playHeart = playlistTemplate
-	$('.playlist').prepend(playHeart)
-}
 
-//fonctions favoris
+//fonctions favoris......................................
+function generatePlaylistHeart(){ //genere la playlist favoris
+    var playHeart = playlistTemplate
+    $('.playlist').prepend(playHeart)
+}
 function ShowFavoris(){ //ouvre les favoris
 	$(".liste").empty()//empty
+    $('#titre2').html('Favoris')
 	let x
 	for(x in favorisObj.favorisSongs) {
 		var allFav = favorisObj.favorisSongs[x]
 		generateFav(allFav)
 	}
+
 }
 function ajoutFav(){ 
 	$('.containLogo').click(function(){//change le logo
@@ -215,6 +239,15 @@ function supprFav(element){//suppr les favoris du LS
 		favorisObj.favorisSongs.splice(x,1)
 		saveTitre()
 }
+//fonctions playlist.................
+function generatePlaylistUser(){ //genere la playlist favoris
+    var playUsers = playlistTemplate
+    $('.playlist').prepend(playUsers)
+}
+
+
+
+
 
  //FONCTIONS LECTEUR.................................................................
  //chargements du JSon
