@@ -85,12 +85,12 @@
   <main>
     <div class="colone2">
         <div id="logo">
-          <img src="images/logo.png" width="100px">
+          <img class='retour' src="images/logo.png" width="100px">
         </div>
         <nav class="nav flex-column">
-          <a class="nav-link active" aria-current="page" id="homePage" href="#"><i class="fas fa-home fa-3x"></i>  Acceuil</a>
+          <a class="retour nav-link active" aria-current="page" id="homePage" href="#"><i class="fas fa-home fa-3x"></i>  Acceuil</a>
           <a class="favShow nav-link" href="#"><i class="fas fa-heart-square fa-3x"></i>   Favoris</a>
-          <a class="playShow nav-link" data-toggle="tooltip" href="#"><i class="fas fa-music fa-3x"></i>   Playlist</a>
+          <a class="nav-link" id="navPlay" data-toggle="tooltip" href="#"><i class="fas fa-music fa-3x"></i>   Playlist</a>
           <a class="nav-link" id="exit" href="#"><i class="fas fa-power-off fa-3x"></i> Déconnection</a>
         </nav>
     </div>
@@ -104,7 +104,7 @@
           </div>
         </div>
         <h4>Playlist:</h4>
-        <div class="playlist"></div>
+        <div class="playlist row row-cols-1 row-cols-md-3 g-4"></div>
         <h4 id="titre2">Les titres:</h4>
         <div class="liste"></div>
     </div>

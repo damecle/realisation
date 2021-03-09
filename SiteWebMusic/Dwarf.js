@@ -66,8 +66,17 @@ var titresTemplateVide = `
         `
 
 var playlistTemplate =`
-	<div class="favShow playlistSize"><i class="coeur fas fa-heart fa-6x"></i></div>
+    <div>
+	   <div class="favShow playlistSize"><i class="coeur fas fa-heart fa-6x"></i></div>
+    </div>
 	`
+var playlistTemplateUser =`
+    <div>
+        <div class="playShow playlistSize">
+        </div>
+        <p id="nomDuPlay">%nameplay%</p>
+    </div>
+    `
 //...
 //REGISTER LOGIN............
 
@@ -84,7 +93,7 @@ $('#registerForm').submit(register)
 
 $('#loginForm').submit(login)
 //navBarre............
-$('#homePage').click(function(){ //btn home(reload provisoire)	
+$('.retour').click(function(){ //btn home(reload provisoire)	
 	location.reload();
 })
 $('#exit').click(function (event) { //btn deconnection
@@ -120,16 +129,18 @@ $.getJSON(urlTarget, function(data){
     var play = 0;
     var audio = document.getElementById('audioFile'); //on laisse JS natif pour utiliser la fonction .play() car pas dispo en jquery
 //Acceuil.......
-	//la playlistFavoris
-	 generatePlaylistHeart()
-	//genere les titres
+
+//genere les titres
    
 	for(x in playlist.songs){
 		var allsongs=data.songs[x]
 		generateTitre(allsongs)
 	}
+//les playlists
     generateVide() //genere un titre vide à la fin pour ne pas gener avec le lecteur
-
+    showPlaylist()
+//la playlistFavoris
+     generatePlaylistHeart()
 //le lecteur
 	//evenements
     loadSong(indexing);
@@ -141,19 +152,19 @@ $.getJSON(urlTarget, function(data){
     $('#shuffle').on('click',toggleShuffle);
    
 
-/*lecteur = lecteur.replace(/%song%/g,data.songs[0].song)
-$('#audioLecteur').prepend(lecteur)*/
-
 //Favoris
 	ajoutFav() //ajout au Local storage
 	$('.favShow').click(ShowFavoris) //aller dans les favoris
 //Playlist
     //playlist div
-    $('.playShow').click(function(){
+    $('#navPlay').click(function(){
         $('#titre2').html("")
         $('.liste').empty()
         $('#player').empty()
         $('#audioFile').empty()
+        $('.playlist').empty()
+        showPlaylist()
+        generatePlaylistHeart()
         $('#player').html(`
                 <div class="d-grid gap-2">
                     <button id="newPlaylist" type="button" class="btnCreat btn btn-primary" data-toggle="tooltip" data-bs-target="#exampleModal">
@@ -162,8 +173,8 @@ $('#audioLecteur').prepend(lecteur)*/
                 </div>
             `)
         $('#newPlaylist').click(function(){
-        $('#modalPlaylist').modal('show')
-        ajoutPlayLs()
+            $('#modalPlaylist').modal('show')
+            ajoutPlayLs()
         })
     })
     //modale
@@ -272,9 +283,17 @@ function supprFav(element){//suppr les favoris du LS
 		saveTitre()
 }
 //fonctions playlist.................
-function generatePlaylistUser(){ //genere la playlist favoris
-    var playUsers = playlistTemplate
-    $('.playlist').prepend(playUsers)
+function showPlaylist(){
+    let x
+    for(x in playlistObj.playlists) {
+        var allPlay = playlistObj.playlists[x]
+        generatePlaylistUser(allPlay)
+    }
+}
+function generatePlaylistUser(allPlay){ //genere la playlist favoris
+    var playTempUsers = playlistTemplateUser
+        playTempUsers = playTempUsers.replace(/%nameplay%/g,allPlay.name)
+    $('.playlist').prepend(playTempUsers)
 }
 function ajoutPlayLs(){ //creation playlist dans le LS
     $('#creation').click(function(){
