@@ -17,6 +17,14 @@ var favorisObj
     } else {
         favorisObj = JSON.parse(localStorage.getItem('favoris'))
     	}
+var playlistObj
+    if (!localStorage.getItem('playlistUser')) {
+            playlistObj = {
+                "playlists": []
+        }
+    } else {
+        playlistObj = JSON.parse(localStorage.getItem('playlistUser'))
+        }
 
         if (!sessionStorage.getItem("session")) {
             $('#loginDiv').show()
@@ -43,6 +51,19 @@ var favorisObj
 	 	</div>
 	 </div>
 		`
+var titresTemplateVide = `
+     <div class="selectTitre modifTitreVide row g-0">
+        <div class="containImg">
+            <img class="modifImg" src="%img%" alt="">
+        </div>
+        <div class="containTxt">
+            <h4 class="nom card-title">%name%</h4>
+            <p class="artiste card-text">%artist%</p>
+        </div>
+        <div class="containLogo">
+        </div>
+     </div>
+        `
 
 var playlistTemplate =`
 	<div class="favShow playlistSize"><i class="coeur fas fa-heart fa-6x"></i></div>
@@ -102,10 +123,12 @@ $.getJSON(urlTarget, function(data){
 	//la playlistFavoris
 	 generatePlaylistHeart()
 	//genere les titres
+   
 	for(x in playlist.songs){
 		var allsongs=data.songs[x]
 		generateTitre(allsongs)
 	}
+    generateVide() //genere un titre vide à la fin pour ne pas gener avec le lecteur
 
 //le lecteur
 	//evenements
@@ -139,7 +162,8 @@ $('#audioLecteur').prepend(lecteur)*/
                 </div>
             `)
         $('#newPlaylist').click(function(){
-            $('#modalPlaylist').modal('show')
+        $('#modalPlaylist').modal('show')
+        ajoutPlayLs()
         })
     })
     //modale
@@ -161,6 +185,14 @@ function generateTitre(songsX){ //genere les titres
 	 	texte = texte.replace(/%name%/g,songsX.name)
 	 	texte = texte.replace(/%artist%/g,songsX.artist)
 	 	$('.liste').append(texte)
+}
+function generateVide(){
+    var texte=titresTemplateVide
+
+        texte = texte.replace(/%img%/g," ")
+        texte = texte.replace(/%name%/g," ")
+        texte = texte.replace(/%artist%/g," ")
+    $('.liste').append(texte)
 }
 
 //fonctions favoris......................................
@@ -243,6 +275,38 @@ function supprFav(element){//suppr les favoris du LS
 function generatePlaylistUser(){ //genere la playlist favoris
     var playUsers = playlistTemplate
     $('.playlist').prepend(playUsers)
+}
+function ajoutPlayLs(){ //creation playlist dans le LS
+    $('#creation').click(function(){
+        var valNamePlay= $('#recipient-name').val()
+        if (valNamePlay == "") {
+            alert("rempli ton champ")
+        }else {
+            let namePlayExist =false
+            let x 
+            for(x in playlistObj.playlists){
+                let actualPlaylist = playlistObj.playlists[x]
+                if (actualPlaylist.name == valNamePlay) {
+                    namePlayExist = true
+                    break;
+                }
+            }
+            if (namePlayExist) {
+                alert('le nom existe déja')
+            }else {
+                var userPlay = {
+                    id: "play_" + uuidv4(),
+                    auteur: JSON.parse(sessionStorage.getItem("session")).id,
+                    name: valNamePlay,
+                    titre: []
+                }
+            }
+            playlistObj.playlists.push(userPlay)
+            savePlay()
+            $('#recipient-name').val("")
+            $('#modalPlaylist').modal('hide')
+        }
+    })
 }
 
 
@@ -521,12 +585,14 @@ function login(event) {
             }
         }
 function saveUsers() {
-            localStorage.setItem('accounts', JSON.stringify(usersObj))
+    localStorage.setItem('accounts', JSON.stringify(usersObj))
         }
 function saveTitre(){
 	localStorage.setItem('favoris', JSON.stringify(favorisObj))
 }
-
+function savePlay(){
+    localStorage.setItem('playlistUser', JSON.stringify(playlistObj))
+}
 
 //four tout
         function uuidv4() {
