@@ -1,5 +1,34 @@
  $(document).ready(function() {
 
+var usersObj
+        if (!localStorage.getItem('accounts')) {
+            usersObj = {
+                "users": []
+            }
+        } else {
+            usersObj = JSON.parse(localStorage.getItem('accounts'))
+        }
+
+var favorisObj
+    if (!localStorage.getItem('favoris')) {
+            favorisObj = {
+                "favorisSongs": []
+        }
+    } else {
+        favorisObj = JSON.parse(localStorage.getItem('favoris'))
+    	}
+
+        if (!sessionStorage.getItem("session")) {
+            $('#loginDiv').show()
+            $('#wallDiv').hide()
+            $('body').css('background-color', '#454343');
+        } else {
+            $('#wallDiv').show()
+             $('#loginDiv').hide()
+             $('#navbarRL').hide()
+             $('body').css('background-color', 'black');
+        }
+
  var titresTemplate = `
 	 <div class="selectTitre modifTitre row g-0">
 	 	<div class="containImg">
@@ -18,6 +47,34 @@
 var playlistTemplate =`
 	<div class="favShow playlistSize"><i class="coeur fas fa-heart fa-6x"></i></div>
 	`
+//...
+//REGISTER LOGIN............
+
+$('#loginMenu').click((event) => {
+            event.preventDefault()
+            displayLogin()
+        })
+$('#registerMenu').click((event) => {
+            event.preventDefault()
+            displayRegister()
+        })
+
+$('#registerForm').submit(register)
+
+$('#loginForm').submit(login)
+//navBarre............
+$('#homePage').click(function(){ //btn home(reload provisoire)	
+	location.reload();
+})
+$('#exit').click(function (event) { //btn deconnection
+    event.preventDefault()
+    sessionStorage.removeItem('session')
+    $('#wallDiv').hide()
+    $('#loginDiv').show()
+    $('#navbarRL').show()
+    $('body').css('background-color', '#454343');
+ })
+
 //...
  var urlMusic="https:raw.githubusercontent.com/damecle/damien/master/jsonMusique.json"
  var urlTarget=urlMusic
@@ -41,7 +98,7 @@ $.getJSON(urlTarget, function(data){
     var safeKill = 0;
     var play = 0;
     var audio = document.getElementById('audioFile'); //on laisse JS natif pour utiliser la fonction .play() car pas dispo en jquery
-//Acceuil
+//Acceuil.......
 	//la playlistFavoris
 	 generatePlaylistHeart()
 	//genere les titres
@@ -65,9 +122,8 @@ $.getJSON(urlTarget, function(data){
 $('#audioLecteur').prepend(lecteur)*/
 
 //Favoris
-
+	ajoutFav() //ajout au Local storage
 	$('.favShow').click(ShowFavoris) //aller dans les favoris
-	ajoutFav()
 	
 
 
@@ -82,27 +138,30 @@ function generateTitre(songsX){ //genere les titres
 	 	texte = texte.replace(/%img%/g,songsX.image)
 	 	texte = texte.replace(/%name%/g,songsX.name)
 	 	texte = texte.replace(/%artist%/g,songsX.artist)
-	 	$('.liste').prepend(texte)
+	 	$('.liste').append(texte)
 }
 function generatePlaylistHeart(){ //genere la playlist favoris
 	var playHeart = playlistTemplate
 	$('.playlist').prepend(playHeart)
 }
-//
-function showAcceuil(){
-	$(".colone3").show()
-}
-//fonctions favoris
-function ShowFavoris(){
-	$(".colone3").hide()
 
+//fonctions favoris
+function ShowFavoris(){ //ouvre les favoris
+	$(".liste").empty()//empty
+	let x
+	for(x in favorisObj.favorisSongs) {
+		var allFav = favorisObj.favorisSongs[x]
+		generateFav(allFav)
+	}
 }
-function ajoutFav(){
-	$('.containLogo').click(function(){
+function ajoutFav(){ 
+	$('.containLogo').click(function(){//change le logo
 		var ceCoeur=$(this)
 		if(coeurFav==0){
 		coeurFav=1
 		ceCoeur.html('<i class="fas fa-heart fa-2x"></i>')
+		//focntion qui ajoute au favoris
+		ajoutFavorisLs(ceCoeur)
 		}else {
 			if (coeurFav==1) {
 				coeurFav=0
@@ -110,6 +169,51 @@ function ajoutFav(){
 			}
 		}
 	})
+}
+function ajoutFavorisLs(selection){ // ajout dans le LS
+	var valName=selection.parent().children().first().next().children().first().text()
+	var valArtist=selection.parent().children().first().next().children().last().text()
+	var titre= getTitreByNameArtist(valName,valArtist)//le tableau du titre
+	//let titreExist = false
+    /*let x
+    for (x in favorisObj.favorisSongs) {
+      let actualTitre = favorisObj.favorisSongs[x]
+        if (actualTitre.name == valName) {
+        titreExist = true
+        break;
+        }
+        if (titreExist) {
+        }
+    }*/
+    var newFavoris = 
+	    {
+	    	name:valName,
+	    	artist:valArtist,
+	    	image:titre.image,
+	    	son:titre.song,
+	    	id:titre.id
+	    }
+    
+    favorisObj.favorisSongs.push(newFavoris)
+    saveTitre()
+    
+}
+function generateFav(allFav){ //generation des titres
+	var titreT = titresTemplate
+	titreT = titreT.replace(/%name%/g,allFav.name)
+	titreT = titreT.replace(/%artist%/g,allFav.artist)
+	titreT = titreT.replace(/%img%/g,allFav.image)
+		$('.liste').append(titreT)
+}
+function supprFav(element){//suppr les favoris du LS
+	var monTitreSppr = element
+	var valName=monTitreSppr.parent().children().first().next().children().first().text()
+	let x
+	for (x in favorisObj.favorisSongs)
+		var currentTitle = favorisObj.favorisSongs[x]
+		if(currentTitle.name == valName)
+		favorisObj.favorisSongs.splice(x,1)
+		saveTitre()
 }
 
  //FONCTIONS LECTEUR.................................................................
@@ -285,4 +389,117 @@ function remiseZero(){ //remise à zéro du temps de la musique pour tout réali
 
 
 	})//fin URL
+//fonctions en dehors 
+//fontions register LOgin
+function displayRegister() {
+            $('#registerDiv').show()
+            $('#loginDiv').hide()
+            $('#registerMenu').parent().addClass("active")
+            $('#loginMenu').parent().removeClass("active")
+        }
+function displayLogin() {
+            $('#loginDiv').show()
+            $('#registerDiv').hide()
+            $('#loginMenu').parent().addClass("active")
+            $('#registerMenu').parent().removeClass("active")
+        }
+        function register(event) {
+            event.preventDefault()
+            //Etape a : Récupération des champs
+            var pseudo = $('#registerPseudo').val()
+            var mdp = $('#registerPassword').val()
+            //Etape b :  Verifications
+            //Verification des champs vides
+            if (mdp == "" || pseudo == "") {
+                alert("Tu dois remplir les champs")
+            } else {
+                //Verification numéro 2
+                // le pseudo ou l'email ou les 2 si besoin existent ils déja dans notre [] d'utlisateurs ?
+                let pseudoExist = false
+                let x
+                for (x in usersObj.users) {
+                    let actualUser = usersObj.users[x]
+                    if (actualUser.pseudo == pseudo) {
+                        pseudoExist = true
+                        break;
+                    }
+                }
+                if (pseudoExist) {
+                    alert("existe deja")
+                } else {
+                    //Etape c : création de l'objet utlisateur :
+                    var user = {
+                        id: uuidv4(),
+                        pseudo: pseudo,
+                        mdp: mdp
+                    }
+                    //Etape d : Ajout du nouvel utilisateur dans la liste des utilisateurs
+                    usersObj.users.push(user);
+                    //Etape e : Sauvegarde dans le localStorage
+                    saveUsers()
+
+                    //ETAPES FACULTATIVES :
+                    //On va vider les champs :
+                    $('#registerPseudo').val("")
+                    $('#registerPassword').val("")
+                    //on va afficher le panneau de login
+                    displayLogin()
+                }
+            }
+        }
+function login(event) {
+            event.preventDefault()
+            //Etape a : Récupération des champs
+            var pseudo = $('#loginPseudo').val()
+            var password = $('#loginPassword').val()
+            //Etape b : VERIFICATIONS  :
+
+            // les champs sont ils tous remplis ?
+            if (password == "" || pseudo == "") {
+                alert("Remplis tout les champs")
+            } else {
+                // le pseudo existe il ? et si oui le mdp correspond il ?
+                let isConnected = false
+                let x
+                for (x in usersObj.users) {
+                    var actualUser = usersObj.users[x]
+                    if (actualUser.pseudo == pseudo) {
+                        if (actualUser.mdp == password) {
+                            isConnected = true
+                            sessionStorage.setItem("session", JSON.stringify(actualUser))
+                            break;
+                        }
+                    }
+                }
+                if (isConnected) {
+                    alert("Bienvenue")
+
+                    $('#loginDiv').hide()
+                    $('#wallDiv').show()
+                    $('#navbarRL').hide()
+                    $('body').css('background-color', 'black');
+                   
+
+
+                } else {
+                    alert("Pseudo ou mot de passe erroné")
+                }
+
+            }
+        }
+function saveUsers() {
+            localStorage.setItem('accounts', JSON.stringify(usersObj))
+        }
+function saveTitre(){
+	localStorage.setItem('favoris', JSON.stringify(favorisObj))
+}
+
+
+//four tout
+        function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
 }) //ready}

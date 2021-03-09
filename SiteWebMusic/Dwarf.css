@@ -1,5 +1,5 @@
 body{
-	background-color: black;
+	background-color: #454343;
 
 }
 /*police,size,couleur des textes*/
@@ -106,6 +106,9 @@ a{
 		top: 40%;
 		cursor: pointer;
 		color: #6C92F1;
+	}
+	.row>*{
+		width: auto;
 	}
 	/*search............*/
 	#search{
