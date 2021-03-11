@@ -52,13 +52,13 @@ a{
 		display: flex;
 	}*/
 	.playlistSize{
+		background-color: #EE998E;
 		cursor: pointer;
 		width: 200px;
 		height: 200px;
 		border-radius: 10px;
 		color:red;
 		border-color: #294BA3;
-		background-color: #F1D8D8;
 
 	}
 	.coeur{
@@ -158,6 +158,13 @@ a{
 
 #player{
   background-color: rgba(187, 48, 48, 0.95);
+  position: fixed;
+  bottom: 0;
+  height: 15vh;
+  width: 100%;
+  z-index: 50;
+}
+#player2{
   position: fixed;
   bottom: 0;
   height: 15vh;

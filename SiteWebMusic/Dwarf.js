@@ -46,7 +46,7 @@ var playlistObj
 		 	<h4 class="nom card-title">%name%</h4>
 		 	<p class="artiste card-text">%artist%</p>
 	 	</div>
-	 	<div class="containLogo">
+	 	<div class="containLogo" data-idC="%coeurId%">
 	 		<i class="far fa-heart fa-2x"></i>
 	 	</div>
         <div  class="dropstart containLogoPlay">
@@ -129,7 +129,6 @@ $('#exit').click(function (event) { //btn deconnection
  var buttonColorOnPress = "white";
 $.getJSON(urlTarget, function(data){
 //les variables
-	var coeurFav=0
 	var x
     var playlist = data;
     var index = 0;
@@ -153,11 +152,18 @@ $.getJSON(urlTarget, function(data){
 	for(x in playlist.songs){
 		var allsongs=data.songs[x]
 		generateTitre(allsongs)
+        loadCoeur(allsongs)
+        
 	}
+    $('.containLogo').click(CoeurPleinVide)
       generateVide() //genere un titre vide à la fin pour ne pas gener avec le lecteur
 //les playlists
   
     showPlaylist()
+    if (!JSON.parse(sessionStorage.getItem("session")).image != null) {
+        $('.playlistSize').css('background-image','url(' + JSON.parse(sessionStorage.getItem("session")).image + ')');
+    }
+    
 //la playlistFavoris
      generatePlaylistHeart()
 //le lecteur
@@ -172,7 +178,8 @@ $.getJSON(urlTarget, function(data){
    
 
 //Favoris
-	ajoutFav() //ajout au Local storage
+
+    //ajout au Local storage
 	$('.favShow').click(ShowFavoris) //aller dans les favoris
     $('.laPlaylist').click(function(){
         let lui=$(this)
@@ -183,12 +190,15 @@ $.getJSON(urlTarget, function(data){
     $('#navPlay').click(function(){//navbraPlaylist
         $('#titre2').html("")
         $('.liste').empty()
-        $('#player').empty()
-        $('#audioFile').empty()
+        $('#player').hide()
+
         $('.playlist').empty()
         showPlaylist()
+        if (!JSON.parse(sessionStorage.getItem("session")).image != null) {
+        $('.playlistSize').css('background-image','url(' + JSON.parse(sessionStorage.getItem("session")).image + ')');
+    }
         generatePlaylistHeart()
-        $('#player').html(`
+        $('#player2').html(`
                 <div class="d-grid gap-2">
                     <button type="button" class="newPlaylist btnCreat btn btn-primary" data-toggle="tooltip" data-bs-target="#exampleModal">
                      Nouvelle playlist
@@ -226,6 +236,8 @@ function generateTitre(songsX){ //genere les titres
 	 	texte = texte.replace(/%img%/g,songsX.image)
 	 	texte = texte.replace(/%name%/g,songsX.name)
 	 	texte = texte.replace(/%artist%/g,songsX.artist)
+        texte = texte.replace(/%coeurId%/g,songsX.id)
+        
 	 	$('.liste').append(texte)
 }
 function generateVide(){
@@ -244,31 +256,48 @@ function generatePlaylistHeart(){ //genere la playlist favoris
 }
 function ShowFavoris(){ //ouvre les favoris
 	$(".liste").empty()//empty
+    $('#player2').hide()
+    $('#player').show()
     $('#titre2').html('Favoris')
 	let x
 	for(x in favorisObj.favorisSongs) {
 		var allFav = favorisObj.favorisSongs[x]
 		generateFav(allFav)
+        loadCoeur(allFav)
 	}
+    generateVide()
 
 }
-function ajoutFav(){
-    $('.containLogo').unbind('click', CoeurPleinVide) 
-	$('.containLogo').click(CoeurPleinVide)
-}
+
+
 function CoeurPleinVide(){
-    var ceCoeur=$(this)
-    if(coeurFav==0){
-    coeurFav=1
-    ceCoeur.html('<i class="fas fa-heart fa-2x"></i>')
-    //focntion qui ajoute au favoris
-    ajoutFavorisLs(ceCoeur)
+var btnCoeur = $(this)
+var unCoeur= btnCoeur.html()
+var coeurPlein='<i class="fas fa-heart fa-2x"></i>'
+var coeurVide='<i class="far fa-heart fa-2x"></i>'
+    if (unCoeur == coeurVide) {
+        btnCoeur.html('<i class="fas fa-heart fa-2x"></i>')
+        ajoutFavorisLs(btnCoeur)  
     }else {
-        if (coeurFav==1) {
-            coeurFav=0
-            ceCoeur.html('<i class="far fa-heart fa-2x"></i>')
-        }
+        btnCoeur.html('<i class="far fa-heart fa-2x"></i>')
     }
+}
+function loadCoeur(songsX){
+    var coeurPlein='<i class="fas fa-heart fa-2x"></i>'
+    var coeurVide='<i class="far fa-heart fa-2x"></i>'
+    var machin=$('.containLogo').attr('data_idC')
+    let z
+    for(z in  favorisObj.favorisSongs){
+        var currentfav= favorisObj.favorisSongs[z]
+        if (currentfav.id == machin) {
+            $('.containLogo').html(coeurPlein)
+        }
+        $('.containLogo').html(coeurVide)
+    }
+        
+        
+
+
 }
 function ajoutFavorisLs(selection){ // ajout dans le LS
 	var valName=selection.parent().children().first().next().children().first().text()
@@ -305,11 +334,12 @@ function generateFav(allFav){ //generation des titres
 	titreT = titreT.replace(/%img%/g,allFav.image)
 		$('.liste').append(titreT)
 }
+
 function supprFav(element){//suppr les favoris du LS
 	var monTitreSppr = element
 	var valName=monTitreSppr.parent().children().first().next().children().first().text()
 	let x
-	for (x in favorisObj.favorisSongs)
+	for (x in favorisObj.favorisSongs){}
 		var currentTitle = favorisObj.favorisSongs[x]
 		if(currentTitle.name == valName)
 		favorisObj.favorisSongs.splice(x,1)
@@ -321,6 +351,7 @@ function showPlaylist(){ //affiche toutes les playlists users
     for(x in playlistObj.playlists) {
         var allPlay = playlistObj.playlists[x]
         generatePlaylistUser(allPlay)
+
     }
 }
 function generatePlaylistUser(allPlay){ //genere la playlist User
@@ -334,7 +365,7 @@ function ajoutPlayLs(){ //creation playlist dans le LS
         var valNamePlay= $('#recipient-name').val()
         if (valNamePlay == "") {
             alert("rempli ton champ")
-        }else {
+        }else{
             let namePlayExist =false
             let x 
             for(x in playlistObj.playlists){
@@ -347,6 +378,7 @@ function ajoutPlayLs(){ //creation playlist dans le LS
             if (namePlayExist) {
                 alert('le nom existe déja')
             }else {
+
                 var userPlay = {
                     id: "play_" + uuidv4(),
                     auteur: JSON.parse(sessionStorage.getItem("session")).id,
@@ -358,6 +390,27 @@ function ajoutPlayLs(){ //creation playlist dans le LS
             savePlay()
             $('#recipient-name').val("")
             $('#modalPlaylist').modal('hide')
+            $('#titre2').html("")
+            $('.liste').empty()
+            $('#player').hide()
+            $('.playlist').empty()
+            showPlaylist()
+            generatePlaylistHeart()
+            $('#player2').html(`
+                    <div class="d-grid gap-2">
+                        <button type="button" class="newPlaylist btnCreat btn btn-primary" data-toggle="tooltip" data-bs-target="#exampleModal">
+                         Nouvelle playlist
+                        </button>
+                    </div>
+                `)
+            $('.newPlaylist').click(function(){
+                $('#modalPlaylist').modal('show')
+                ajoutPlayLs()
+            })
+            $('.laPlaylist').click(function(){
+            let lui=$(this)
+            affichageTitrePlay(lui)
+            })
         }
     })
 }
@@ -389,6 +442,8 @@ function ajoutPlayLs(){ //creation playlist dans le LS
 
     function affichageTitrePlay(lui){
         $(".liste").empty()
+        $('#player2').hide()
+        $('#player').show()
         var idplay = lui.attr('data-id')
         let x 
         for(x in playlistObj.playlists){
@@ -398,10 +453,12 @@ function ajoutPlayLs(){ //creation playlist dans le LS
                 let y
                 for(y in actualTitre.titre){
                     var lesTitres = actualTitre.titre[y]
-                    generateTitre(lesTitres) 
+                    generateTitre(lesTitres)
+                    loadCoeur(lesTitres)
                 }
             }
-        }   
+        }
+        generateVide()   
     }
     // fonctions playlist 3 points
     function openDropdowns(){ //fct des evenement du dropdown
@@ -632,15 +689,18 @@ function displayLogin() {
             event.preventDefault()
             //Etape a : Récupération des champs
             var pseudo = $('#registerPseudo').val()
+            var email = $('#registerEmail').val()
             var mdp = $('#registerPassword').val()
+            var photo = $('#registerPhoto').val()
             //Etape b :  Verifications
             //Verification des champs vides
-            if (mdp == "" || pseudo == "") {
+            if (mdp == "" || pseudo == "" || email == "" || photo == "") {
                 alert("Tu dois remplir les champs")
             } else {
                 //Verification numéro 2
                 // le pseudo ou l'email ou les 2 si besoin existent ils déja dans notre [] d'utlisateurs ?
                 let pseudoExist = false
+                let emailExist =false
                 let x
                 for (x in usersObj.users) {
                     let actualUser = usersObj.users[x]
@@ -648,14 +708,21 @@ function displayLogin() {
                         pseudoExist = true
                         break;
                     }
+                    if (actualUser.email == email) {
+                        pseudoExist = true
+                        break;
+                    }
                 }
-                if (pseudoExist) {
-                    alert("existe deja")
+                if ((pseudoExist) || (emailExist)) {
+                    alert("pseudo ou email existe deja")
+
                 } else {
                     //Etape c : création de l'objet utlisateur :
                     var user = {
                         id: uuidv4(),
                         pseudo: pseudo,
+                        email: email,
+                        image: photo,
                         mdp: mdp
                     }
                     //Etape d : Ajout du nouvel utilisateur dans la liste des utilisateurs
@@ -665,8 +732,10 @@ function displayLogin() {
 
                     //ETAPES FACULTATIVES :
                     //On va vider les champs :
-                    $('#registerPseudo').val("")
-                    $('#registerPassword').val("")
+            var pseudo = $('#registerPseudo').val("")
+            var email = $('#registerEmail').val("")
+            var mdp = $('#registerPassword').val("")
+            var photo = $('#registerPhoto').val("")
                     //on va afficher le panneau de login
                     displayLogin()
                 }
@@ -688,7 +757,7 @@ function login(event) {
                 let x
                 for (x in usersObj.users) {
                     var actualUser = usersObj.users[x]
-                    if (actualUser.pseudo == pseudo) {
+                    if ((actualUser.pseudo == pseudo) ||(actualUser.email == pseudo)) {
                         if (actualUser.mdp == password) {
                             isConnected = true
                             sessionStorage.setItem("session", JSON.stringify(actualUser))
@@ -703,7 +772,7 @@ function login(event) {
                     $('#wallDiv').show()
                     $('#navbarRL').hide()
                     $('body').css('background-color', 'black');
-                   
+                    location.reload();
 
 
                 } else {
