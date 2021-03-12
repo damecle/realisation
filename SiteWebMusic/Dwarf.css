@@ -77,6 +77,9 @@ a{
 		width: 200px;
 	}
 	/*les titres...................*/
+	#titre2{
+		margin-top: 25px;
+	}
 	.modifTitre{
 		background-color: #443F3F;
 		position: relative;
@@ -232,4 +235,61 @@ a{
 #menu > button:focus{
   outline: none;
 }
+
+		/* CAROUSEL START */
+#carroussel{
+	overflow:hidden;
+	position: relative;
+	height: 270px;
+
+
+/*fleches*/	
+}
+.suiv img{
+	cursor: pointer;
+	position: absolute;
+	left: 10%;
+	top: 25%;
+	height: 50%;
+	width: 50px;
+
+
+}
+.prec img{
+	cursor: pointer;
+	position: absolute;
+	top: 25%;
+	left: -0;
+	height: 50%;
+	width: 50px;
+	transform: rotate(180deg);
+}
+/*passage de la souris, decalage flèche*/
+.suiv img:hover{
+	right: -10px;
+}
+.prec img:hover{
+	left: -10px;
+}
+
+
+/*class qui redimensionne les images dans la div slide*/
+.redimension{
+	height: 80%; 
+}
+
+/*le slide*/
+.slider{
+	position: relative;
+	top: 16px;
+	/*left:-25px;*/
+	width: 5000px;
+	height: 100%;
+
+}
+/*les images/
+	/*les encadrés des images*/
+
+
+
 

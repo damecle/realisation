@@ -75,16 +75,20 @@ var titresTemplateVide = `
         `
 
 var playlistTemplate =`
-    <div>
-	   <div class="favShow playlistSize"><i class="coeur fas fa-heart fa-6x"></i></div>
-    </div>
+    
+        <div>
+    	   <div class="favShow playlistSize"><i class="coeur fas fa-heart fa-6x"></i></div>
+        </div>
+    
 	`
 var playlistTemplateUser =`
-    <div class="laPlaylist" data-id='%id%'>
-        <div class="playShow playlistSize">
+    
+        <div class="laPlaylist" data-id='%id%'>
+            <div class="playShow playlistSize">
+            </div>
+            <p id="nomDuPlay">%nameplay%</p>
         </div>
-        <p id="nomDuPlay">%nameplay%</p>
-    </div>
+    
     `
 var templateDrop=`
     <ul class="dropdown-menu">
@@ -158,14 +162,17 @@ $.getJSON(urlTarget, function(data){
     $('.containLogo').click(CoeurPleinVide)
       generateVide() //genere un titre vide à la fin pour ne pas gener avec le lecteur
 //les playlists
-  
+    
     showPlaylist()
+
     if (!JSON.parse(sessionStorage.getItem("session")).image != null) {
         $('.playlistSize').css('background-image','url(' + JSON.parse(sessionStorage.getItem("session")).image + ')');
     }
     
 //la playlistFavoris
      generatePlaylistHeart()
+
+     
 //le lecteur
 	//evenements
     loadSong(indexing);
@@ -191,7 +198,7 @@ $.getJSON(urlTarget, function(data){
         $('#titre2').html("")
         $('.liste').empty()
         $('#player').hide()
-
+        $('#carroussel').hide()
         $('.playlist').empty()
         showPlaylist()
         if (!JSON.parse(sessionStorage.getItem("session")).image != null) {
@@ -254,6 +261,10 @@ function generatePlaylistHeart(){ //genere la playlist favoris
     var playHeart = playlistTemplate
     $('.playlist').prepend(playHeart)
 }
+// function generatePlaylistHeartCarrou(){
+//     var playHeart = playlistTemplate
+//     $('.slider').prepend(playHeart)
+// }
 function ShowFavoris(){ //ouvre les favoris
 	$(".liste").empty()//empty
     $('#player2').hide()
@@ -285,7 +296,7 @@ var coeurVide='<i class="far fa-heart fa-2x"></i>'
 function loadCoeur(songsX){
     var coeurPlein='<i class="fas fa-heart fa-2x"></i>'
     var coeurVide='<i class="far fa-heart fa-2x"></i>'
-    var machin=$('.containLogo').attr('data_idC')
+    var machin=$('.containLogo').attr('data-idC')
     let z
     for(z in  favorisObj.favorisSongs){
         var currentfav= favorisObj.favorisSongs[z]
@@ -345,7 +356,8 @@ function supprFav(element){//suppr les favoris du LS
 		favorisObj.favorisSongs.splice(x,1)
 		saveTitre()
 }
-//fonctions playlist.................
+//fonctions playlist..............................................................................................................................
+ 
 function showPlaylist(){ //affiche toutes les playlists users
     let x
     for(x in playlistObj.playlists) {
@@ -354,12 +366,26 @@ function showPlaylist(){ //affiche toutes les playlists users
 
     }
 }
+// function showPlaylistCarrou(){
+//     let x
+//     for(x in playlistObj.playlists) {
+//         var allPlay = playlistObj.playlists[x]
+//         generatePlaylistUserCarrou(allPlay)
+
+//     }
+// }
 function generatePlaylistUser(allPlay){ //genere la playlist User
     var playTempUsers = playlistTemplateUser
         playTempUsers = playTempUsers.replace(/%nameplay%/g,allPlay.name)
         playTempUsers = playTempUsers.replace(/%id%/g,allPlay.id)
     $('.playlist').prepend(playTempUsers)
 }
+// function generatePlaylistUserCarrou(allPlay){
+//     var playTempUsers = playlistTemplateUser
+//         playTempUsers = playTempUsers.replace(/%nameplay%/g,allPlay.name)
+//         playTempUsers = playTempUsers.replace(/%id%/g,allPlay.id)
+//     $('.slider').prepend(playTempUsers)
+// }
 function ajoutPlayLs(){ //creation playlist dans le LS
     $('#creation').click(function(){
         var valNamePlay= $('#recipient-name').val()
@@ -385,42 +411,46 @@ function ajoutPlayLs(){ //creation playlist dans le LS
                     name: valNamePlay,
                     titre: []
                 }
+            
+                playlistObj.playlists.push(userPlay)
+                savePlay()
+                $('#recipient-name').val("")
+                $('#modalPlaylist').modal('hide')
+                $('#titre2').html("")
+                $('.liste').empty()
+                $('#player').hide()
+                $('.playlist').empty()
+                showPlaylist()
+                generatePlaylistHeart()
+                $('#player2').html(`
+                        <div class="d-grid gap-2">
+                            <button type="button" class="newPlaylist btnCreat btn btn-primary" data-toggle="tooltip" data-bs-target="#exampleModal">
+                             Nouvelle playlist
+                            </button>
+                        </div>
+                    `)
+                $('.newPlaylist').click(function(){
+                    $('#modalPlaylist').modal('show')
+                    ajoutPlayLs()
+                })
+                $('.laPlaylist').click(function(){
+                let lui=$(this)
+                affichageTitrePlay(lui)
+                })
             }
-            playlistObj.playlists.push(userPlay)
-            savePlay()
-            $('#recipient-name').val("")
-            $('#modalPlaylist').modal('hide')
-            $('#titre2').html("")
-            $('.liste').empty()
-            $('#player').hide()
-            $('.playlist').empty()
-            showPlaylist()
-            generatePlaylistHeart()
-            $('#player2').html(`
-                    <div class="d-grid gap-2">
-                        <button type="button" class="newPlaylist btnCreat btn btn-primary" data-toggle="tooltip" data-bs-target="#exampleModal">
-                         Nouvelle playlist
-                        </button>
-                    </div>
-                `)
-            $('.newPlaylist').click(function(){
-                $('#modalPlaylist').modal('show')
-                ajoutPlayLs()
-            })
-            $('.laPlaylist').click(function(){
-            let lui=$(this)
-            affichageTitrePlay(lui)
-            })
         }
     })
 }
     //ajout des titres dans la playlist
     
-    function ajoutTitrePlayLS(celuila){ //ajout des titres playlist dans le LS
-        var valName=$('.containImg').parent().children().first().next().children().first().text()
-        var valArtist=$('.containImg').parent().children().first().next().children().last().text()
+    function ajoutTitrePlayLS(celuila,ok){ //ajout des titres playlist dans le LS
+
+        var valName=ok.parent().children().first().next().children().first().text()
+        var valArtist=ok.parent().children().first().next().children().last().text()
         var titre= getTitreByNameArtist(valName,valArtist)
         var idTitre= celuila.attr("data-id")
+        console.log()
+
 
         var newtitrePlay = 
             {
@@ -430,6 +460,7 @@ function ajoutPlayLs(){ //creation playlist dans le LS
                 son:titre.song,
                 id:titre.id
             }
+
             let x
             for (x in playlistObj.playlists){
                 let actualTitre=playlistObj.playlists[x]
@@ -463,6 +494,7 @@ function ajoutPlayLs(){ //creation playlist dans le LS
     // fonctions playlist 3 points
     function openDropdowns(){ //fct des evenement du dropdown
         $('.containLogoPlay').click(function(){
+            var cetteMus = $(this)
             $('.containLogoPlay').dropdown('hide')
             $(this).dropdown('show')
             $('.newPlaylist').click(function(){
@@ -473,11 +505,11 @@ function ajoutPlayLs(){ //creation playlist dans le LS
                 $('#modalePlay').modal('show')
                 $('.iciPlay').empty()
                 showNamePlaylist()
-                $('.nomDeLaPlay').click(function(){
-                    var celuila=$(this)
-                    ajoutTitrePlayLS(celuila)
-                    $('#modalePlay').modal('hide')
-                })
+            
+            })
+            $('.nomDeLaPlay').click(function(){
+                var ok = $(this)
+                ajoutLSplaylist(ok,cetteMus)
             })
         })
     }
@@ -497,7 +529,12 @@ function ajoutPlayLs(){ //creation playlist dans le LS
     $('.iciPlay').prepend(playTemp)
     }
     
-
+function ajoutLSplaylist(ok,cetteMus){
+    var cetteMuse = cetteMus 
+    var celuila= ok
+    ajoutTitrePlayLS(celuila, cetteMuse)
+    $('#modalePlay').modal('hide')
+}
  //FONCTIONS LECTEUR.................................................................
  //chargements du JSon
      function loadSong(leSon){ //chargement du son
@@ -506,7 +543,7 @@ function ajoutPlayLs(){ //creation playlist dans le LS
             totalTime = NaN;
             stopTimer = setInterval(function(){
                 updateTimer(data);},1000);
-            console.log(data)
+            
     } 
  //Boutons  
  //btn play
