@@ -128,7 +128,7 @@ $('#exit').click(function (event) { //btn deconnection
  })
 
 //...
- var urlMusic="https:raw.githubusercontent.com/damecle/damien/master/jsonMusique.json"
+ var urlMusic="https:raw.githubusercontent.com/damecle/realisation/master/jsonMusiqueTemps.json"
  var urlTarget=urlMusic
  var buttonColorOnPress = "white";
 $.getJSON(urlTarget, function(data){
