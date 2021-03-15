@@ -867,6 +867,7 @@ function savePlay(){
         }
 $(window).resize(function(){
     versionSmart()
+    versionSmartPay()
 })
 versionSmart()
 versionSmartPay()

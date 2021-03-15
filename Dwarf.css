@@ -325,6 +325,9 @@ background-color: rgba(187, 48, 48, 0.95);
 	.modifImg{
 		display: none;
 	}
+	.containLogo{
+		margin-right: 10%;
+	}
 }
 
 
