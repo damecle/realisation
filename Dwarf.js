@@ -155,15 +155,13 @@ $.getJSON(urlTarget, function(data){
    
 	for(x in playlist.songs){
 		var allsongs=data.songs[x]
-		generateTitre(allsongs)
-        loadCoeur(allsongs)
-        
+		generateTitre(allsongs) 
 	}
     clickSearch()
     $('.containLogo').click(CoeurPleinVide)
       generateVide() //genere un titre vide à la fin pour ne pas gener avec le lecteur
 //les playlists
-    
+    loadFavorito()
     showPlaylist()
 
     if (!JSON.parse(sessionStorage.getItem("session")).image != null) {
@@ -275,9 +273,10 @@ function ShowFavoris(){ //ouvre les favoris
 	for(x in favorisObj.favorisSongs) {
 		var allFav = favorisObj.favorisSongs[x]
 		generateFav(allFav)
-        loadCoeur(allFav)
+        
 	}
     generateVide()
+    loadFavorito()
 
 }
 
@@ -294,22 +293,27 @@ var coeurVide='<i class="far fa-heart fa-2x"></i>'
         btnCoeur.html('<i class="far fa-heart fa-2x"></i>')
     }
 }
-function loadCoeur(songsX){
-    var coeurPlein='<i class="fas fa-heart fa-2x"></i>'
-    var coeurVide='<i class="far fa-heart fa-2x"></i>'
-    var machin=$('.containLogo').attr('data-idC')
-    let z
-    for(z in  favorisObj.favorisSongs){
-        var currentfav= favorisObj.favorisSongs[z]
-        if (currentfav.id == machin) {
-            $('.containLogo').html(coeurPlein)
-        }
-        $('.containLogo').html(coeurVide)
-    }
-        
-        
+//loadFav
+function loadFavorito(){
+    $('.colone3').find('.selectTitre').each(function(){
+            var leCoeur = $(this).find('.containLogo').html()
+            var leNom = $(this).find('.nom').html()
+            var lartist = $(this).find('.artiste').html()
+            var coeurPlein='<i class="fas fa-heart fa-2x"></i>'
+            var coeurVide='<i class="far fa-heart fa-2x"></i>'
 
+            let x
+            for(x in favorisObj.favorisSongs) {
+            var allFav = favorisObj.favorisSongs[x]
+                if((allFav.name == leNom) || (allFav.artist == lartist)){
 
+                    $(this).find('.containLogo').html(coeurPlein)
+                    
+                }
+
+            }
+ 
+        })    
 }
 function ajoutFavorisLs(selection){ // ajout dans le LS
 	var valName=selection.parent().children().first().next().children().first().text()
@@ -486,11 +490,11 @@ function ajoutPlayLs(){ //creation playlist dans le LS
                 for(y in actualTitre.titre){
                     var lesTitres = actualTitre.titre[y]
                     generateTitre(lesTitres)
-                    loadCoeur(lesTitres)
                 }
             }
         }
-        generateVide()   
+        generateVide() 
+        loadFavorito()  
     }
     // fonctions playlist 3 points
     function openDropdowns(){ //fct des evenement du dropdown
@@ -730,6 +734,7 @@ function recherche(event){
             generateVide()
         })    
 }
+
 
 	})//fin URL
 //fonctions en dehors 
