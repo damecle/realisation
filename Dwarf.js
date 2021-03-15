@@ -290,7 +290,9 @@ var coeurVide='<i class="far fa-heart fa-2x"></i>'
         btnCoeur.html('<i class="fas fa-heart fa-2x"></i>')
         ajoutFavorisLs(btnCoeur)  
     }else {
+        supprFav(btnCoeur)
         btnCoeur.html('<i class="far fa-heart fa-2x"></i>')
+        
     }
 }
 //loadFav
@@ -315,6 +317,28 @@ function loadFavorito(){
  
         })    
 }
+function supprFavorito(){
+    $('.colone3').find('.selectTitre').each(function(){
+        var leCoeur = $(this).find('.containLogo').html()
+        var leNom = $(this).find('.nom').html()
+        var lartist = $(this).find('.artiste').html()
+        var coeurPlein='<i class="fas fa-heart fa-2x"></i>'
+        var coeurVide='<i class="far fa-heart fa-2x"></i>'
+        let x
+        for(x in favorisObj.favorisSongs) {
+            var allFav = favorisObj.favorisSongs[x]
+            if((allFav.name == leNom) || (allFav.artist == lartist)){
+
+                favorisObj.favorisSongs.splice(x, 1)
+                break;
+                    
+            }
+
+        }
+ 
+    })    
+}
+
 function ajoutFavorisLs(selection){ // ajout dans le LS
 	var valName=selection.parent().children().first().next().children().first().text()
 	var valArtist=selection.parent().children().first().next().children().last().text()
@@ -351,15 +375,17 @@ function generateFav(allFav){ //generation des titres
 		$('.liste').append(titreT)
 }
 
-function supprFav(element){//suppr les favoris du LS
-	var monTitreSppr = element
-	var valName=monTitreSppr.parent().children().first().next().children().first().text()
+function supprFav(btnCoeur){//suppr les favoris du LS
+	var valName=btnCoeur.parent().children().first().next().children().first().text()
+    var valArtist=btnCoeur.parent().children().first().next().children().last().text()
 	let x
-	for (x in favorisObj.favorisSongs){}
-		var currentTitle = favorisObj.favorisSongs[x]
-		if(currentTitle.name == valName)
-		favorisObj.favorisSongs.splice(x,1)
-		saveTitre()
+	for (x in favorisObj.favorisSongs){
+        var currentTitle = favorisObj.favorisSongs[x]
+        if((currentTitle.name == valName)||(currentTitle.artist == valArtist))
+        favorisObj.favorisSongs.splice(x,1)
+        saveTitre()
+    }
+
 }
 //fonctions playlist..............................................................................................................................
  
