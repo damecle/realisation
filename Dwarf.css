@@ -168,6 +168,7 @@ a{
   z-index: 50;
 }
 #player2{
+background-color: rgba(187, 48, 48, 0.95);
   position: fixed;
   bottom: 0;
   height: 15vh;

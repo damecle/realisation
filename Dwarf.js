@@ -755,7 +755,7 @@ function displayLogin() {
             var photo = $('#registerPhoto').val()
             //Etape b :  Verifications
             //Verification des champs vides
-            if (mdp == "" || pseudo == "" || email == "" || photo == "") {
+            if (mdp == "" || pseudo == "" || email == "") {
                 alert("Tu dois remplir les champs")
             } else {
                 //Verification numéro 2
@@ -869,12 +869,19 @@ $(window).resize(function(){
     versionSmart()
 })
 versionSmart()
+versionSmartPay()
 
 function versionSmart(){
     var largeurWindow = $(window).width()
     if (largeurWindow < 527) {
         $('span').hide()
         $('.retour').css('width','75px')
+    }
+}
+function versionSmartPay(){
+    var hauteurWindow = $(window).height()
+    if (hauteurWindow < 450) {
+        $('#player').css("margin-bottom","10%")
     }
 }
 }) //ready}
