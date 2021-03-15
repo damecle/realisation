@@ -96,22 +96,22 @@
           <img class='retour' src="./images/logo.png" width="100px">
         </div>
         <nav class="nav flex-column">
-          <a class="retour nav-link active" aria-current="page" id="homePage" href="#"><i class="fas fa-home fa-3x"></i>  Acceuil</a>
-          <a class="favShow nav-link" href="#"><i class="fas fa-heart-square fa-3x"></i>   Favoris</a>
-          <a class="nav-link" id="navPlay" data-toggle="tooltip" href="#"><i class="fas fa-music fa-3x"></i>   Playlist</a>
-          <a class="nav-link" id="exit" href="#"><i class="fas fa-power-off fa-3x"></i> Déconnection</a>
+          <a class="retour nav-link active" aria-current="page" id="homePage" href="#"><i class="fas fa-home fa-3x"></i>  <span>Acceuil</span></a>
+          <a class="favShow nav-link" href="#"><i class="fas fa-heart-square fa-3x"></i>   <span>Favoris</span></a>
+          <a class="nav-link" id="navPlay" data-toggle="tooltip" href="#"><i class="fas fa-music fa-3x"></i>   <span>Playlist</span></a>
+          <a class="nav-link" id="exit" href="#"><i class="fas fa-power-off fa-3x"></i> <span>Déconnection</span></a>
         </nav>
     </div>
     <div class="colone3">
         <div id="search">
           <div class="container-fluid">
-            <form class="searchBar d-flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form id='searchForm' class="searchBar d-flex">
+              <input id="searchTxt" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
             </form>
           </div>
         </div>
-        <h4>Playlist:</h4>
+        <h5>Playlist:</h5>
 <!--         <div id="carroussel" >
           <div class="slider row">
             <div  class="suiv"><img src="./images/fd1.png"></div>
@@ -119,7 +119,7 @@
           </div>
         </div> -->
         <div class="playlist row row-cols-1 row-cols-md-3 g-4"></div>
-        <h4 id="titre2">Les titres:</h4>
+        <h5 id="titre2">Les titres:</h5>
         <div class="liste"></div>
     </div>
   </main>

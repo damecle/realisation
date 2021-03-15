@@ -3,7 +3,7 @@ body{
 
 }
 /*police,size,couleur des textes*/
-h4{
+h5{
 	color: white;
 }
 
@@ -290,6 +290,40 @@ a{
 /*les images/
 	/*les encadrés des images*/
 
-
+@media (max-width: 527px){
+	#logo{
+		margin-left: 10%;
+	}
+	.laPlaylist{
+		margin-left: 20%;
+	}
+	.favShowDis{
+		margin-left: 33%;
+	}
+	#nomDuPlay{
+		margin-left: 20%;
+	}
+	.colone2{
+		width: 20%;
+	}
+	.colone3{
+		width: 80%;
+	}
+	#search{
+		margin-left: 20%;
+	}
+	h5{
+		margin-left: 20%;
+	}
+	h4{
+		font-size: 80%;
+	}
+	p{
+		font-size: 80%;
+	}
+	.modifImg{
+		display: none;
+	}
+}
 
 

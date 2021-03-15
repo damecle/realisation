@@ -77,7 +77,7 @@ var titresTemplateVide = `
 var playlistTemplate =`
     
         <div>
-    	   <div class="favShow playlistSize"><i class="coeur fas fa-heart fa-6x"></i></div>
+    	   <div class="favShowDis favShow playlistSize"><i class="coeur fas fa-heart fa-6x"></i></div>
         </div>
     
 	`
@@ -159,6 +159,7 @@ $.getJSON(urlTarget, function(data){
         loadCoeur(allsongs)
         
 	}
+    clickSearch()
     $('.containLogo').click(CoeurPleinVide)
       generateVide() //genere un titre vide à la fin pour ne pas gener avec le lecteur
 //les playlists
@@ -705,7 +706,30 @@ function remiseZero(){ //remise à zéro du temps de la musique pour tout réali
     counter=0;
     clearInterval(stopTimer);
 }
+//barre de recherche
+function clickSearch(){
+    $('#searchForm').submit(recherche)
+}
+function recherche(event){
+    event.preventDefault()
+    var valSearch = $('#searchTxt').val()
 
+        $('.colone3').find('.selectTitre').each(function(){
+            var leNom = $(this).find('.nom').html()
+            var lartist = $(this).find('.artiste').html()
+            console.log(leNom)
+
+            if((valSearch == leNom)||(valSearch == lartist)){
+                
+                $(this).show()
+                
+            }else {
+                
+                $(this).hide()
+            }
+            generateVide()
+        })    
+}
 
 	})//fin URL
 //fonctions en dehors 
@@ -739,6 +763,7 @@ function displayLogin() {
                 let pseudoExist = false
                 let emailExist =false
                 let x
+                let maRegex = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\&\#\-\_\+\=\@\{\}\[\]\(\)])[A-Za-z\d\&\#\-\_\+\=\@\{\}\[\]\(\)]{6,}$/g)
                 for (x in usersObj.users) {
                     let actualUser = usersObj.users[x]
                     if (actualUser.pseudo == pseudo) {
@@ -753,7 +778,8 @@ function displayLogin() {
                 if ((pseudoExist) || (emailExist)) {
                     alert("pseudo ou email existe deja")
 
-                } else {
+                } else { 
+                    if (mdp.match(maRegex)){
                     //Etape c : création de l'objet utlisateur :
                     var user = {
                         id: uuidv4(),
@@ -769,12 +795,16 @@ function displayLogin() {
 
                     //ETAPES FACULTATIVES :
                     //On va vider les champs :
-            var pseudo = $('#registerPseudo').val("")
-            var email = $('#registerEmail').val("")
-            var mdp = $('#registerPassword').val("")
-            var photo = $('#registerPhoto').val("")
+                    var pseudo = $('#registerPseudo').val("")
+                    var email = $('#registerEmail').val("")
+                    var mdp = $('#registerPassword').val("")
+                    var photo = $('#registerPhoto').val("")
                     //on va afficher le panneau de login
                     displayLogin()
+                    }else {
+                        alert("le mot de passe ne correspond pas au exigences")
+                    }
+
                 }
             }
         }
@@ -835,4 +865,18 @@ function savePlay(){
                 return v.toString(16);
             });
         }
+$(window).resize(function(){
+    versionSmart()
+})
+versionSmart()
+
+function versionSmart(){
+    var largeurWindow = $(window).width()
+    if (largeurWindow < 527) {
+        $('span').hide()
+        $('.retour').css('width','75px')
+    }
+}
 }) //ready}
+
+
