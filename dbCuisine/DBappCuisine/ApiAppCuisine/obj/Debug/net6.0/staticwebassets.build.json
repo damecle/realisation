@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "VsVFJMgsTkAqwt7D8bzLImj5tucliVISdqesQi32gwk=",
+  "Source": "ApiAppCuisine",
+  "BasePath": "_content/ApiAppCuisine",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
